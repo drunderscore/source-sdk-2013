@@ -12,6 +12,8 @@
 #pragma once
 #endif
 
+#include <ehandle.h>
+
 
 //-----------------------------------------------------------------------------
 // Forward declarations

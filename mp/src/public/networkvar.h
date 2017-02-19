@@ -666,6 +666,7 @@ private:
 	NETWORK_VAR_END( Quaternion, name, CNetworkQuaternionBase, NetworkStateChanged )
 
 // Helper for color32's. Contains GetR(), SetR(), etc.. functions.
+#include <basetypes.h>
 #define CNetworkColor32( name ) \
 	NETWORK_VAR_START( color32, name ) \
 	NETWORK_VAR_END( color32, name, CNetworkColor32Base, NetworkStateChanged )

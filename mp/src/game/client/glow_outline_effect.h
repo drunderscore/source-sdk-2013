@@ -115,7 +115,7 @@ public:
 
 	void RenderGlowEffects( const CViewSetup *pSetup, int nSplitScreenSlot );
 
-private:
+//private:
 
 	void RenderGlowModels( const CViewSetup *pSetup, int nSplitScreenSlot, CMatRenderContextPtr &pRenderContext );
 	void ApplyEntityGlowEffects( const CViewSetup *pSetup, int nSplitScreenSlot, CMatRenderContextPtr &pRenderContext, float flBloomScale, int x, int y, int w, int h );

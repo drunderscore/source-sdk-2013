@@ -57,8 +57,8 @@ enum InvalidatePhysicsBits_t
 
 
 #if defined( CLIENT_DLL )
-#include "c_baseentity.h"
-#include "c_baseanimating.h"
+#include "../client/c_baseentity.h"
+#include "../client/c_baseanimating.h"
 #else
 #include "baseentity.h"
 

@@ -11,6 +11,14 @@
 #pragma once
 #endif
 
+#include <const.h>
+#include <shareddefs.h>
+#include <client/hudelement.h>
+#include <vgui_controls/Panel.h>
+#include <vgui/ISurface.h>
+
+class CHudTexture;
+
 // Player entries in a death notice
 struct DeathNoticePlayer
 {
@@ -73,6 +81,9 @@ struct DeathNoticeItem
 	int			iKillerID;
 	int			iVictimID;
 	int			iCount;
+    
+	// Pazer: to match TF2, size has to be 408
+	char unknown[4];
 };
 
 #define NUM_CORNER_COORD 10
@@ -86,6 +97,7 @@ class CHudBaseDeathNotice : public CHudElement, public vgui::Panel
 	DECLARE_CLASS_SIMPLE( CHudBaseDeathNotice, vgui::Panel );
 public:
 	CHudBaseDeathNotice( const char *pElementName );
+	~CHudBaseDeathNotice() { }
 
 	void VidInit( void );
 	virtual void Init( void );

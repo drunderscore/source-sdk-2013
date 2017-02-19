@@ -18,6 +18,10 @@
 #include "engine/ishadowmgr.h"
 #include "ivrenderview.h"
 #include "toolframework/itoolentity.h"
+#include <ehandle.h>
+#include <client/c_baseentity.h>
+
+typedef CHandle<C_BaseEntity> EHANDLE;
 
 //-----------------------------------------------------------------------------
 // Forward decls

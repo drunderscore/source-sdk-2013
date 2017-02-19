@@ -26,6 +26,9 @@
 #include "igameevents.h"
 #include "GameEventListener.h"
 
+#include <baseplayer_shared.h>
+#include <vphysics_interface.h>
+
 #if defined USES_ECON_ITEMS
 #include "econ_item.h"
 #include "game_item_schema.h"

@@ -70,22 +70,26 @@ const char *MakeModuleFileName()
 
 static void *AllocUnattributed( size_t nSize )
 {
+#if _MSC_VER < 1900
 	static const char *pszOwner = MakeModuleFileName();
 
-	if ( !pszOwner )
-		return g_pMemAlloc->Alloc(nSize);
-	else
+	if ( pszOwner )
 		return g_pMemAlloc->Alloc(nSize, pszOwner, 0);
+	else
+#endif
+		return g_pMemAlloc->Alloc(nSize);
 }
 
 static void *ReallocUnattributed( void *pMem, size_t nSize )
 {
+#if _MSC_VER < 1900
 	static const char *pszOwner = MakeModuleFileName();
 
-	if ( !pszOwner )
-		return g_pMemAlloc->Realloc(pMem, nSize);
-	else
+	if ( pszOwner )
 		return g_pMemAlloc->Realloc(pMem, nSize, pszOwner, 0);
+	else
+#endif
+		return g_pMemAlloc->Realloc(pMem, nSize);
 }
 
 #else
@@ -108,7 +112,15 @@ inline void *ReallocUnattributed( void *pMem, size_t nSize )
 // this magic only works under win32
 // under linux this malloc() overrides the libc malloc() and so we
 // end up in a recursion (as g_pMemAlloc->Alloc() calls malloc)
-#if _MSC_VER >= 1400
+
+#ifndef _CRTNOALIAS
+#define _CRTNOALIAS __declspec(noalias)
+#endif
+
+#if _MSC_VER >= 1900
+#define ALLOC_CALL _CRTRESTRICT
+#define FREE_CALL 
+#elif _MSC_VER >= 1400
 #define ALLOC_CALL _CRTNOALIAS _CRTRESTRICT 
 #define FREE_CALL _CRTNOALIAS 
 #else
@@ -156,30 +168,59 @@ void* __cdecl _malloc_base( size_t nSize )
 	return AllocUnattributed( nSize );
 }
 #else
-void *_malloc_base( size_t nSize )
+__declspec(restrict) void *_malloc_base( size_t nSize )
 {
 	return AllocUnattributed( nSize );
 }
 #endif
 
+#if _MSC_VER >= 1900
+__declspec(restrict) void *_calloc_base(size_t count, size_t size)
+{
+	void *pMem = AllocUnattributed(count * size);
+	memset(pMem, 0, count * size);
+	return pMem;
+}
+#else
 void *_calloc_base( size_t nSize )
 {
 	void *pMem = AllocUnattributed( nSize );
 	memset(pMem, 0, nSize);
 	return pMem;
 }
+#endif
 
+#if _MSC_VER >= 1900
+__declspec(restrict) void* __cdecl _realloc_base(void *pMem, size_t size)
+{
+	return ReallocUnattributed(pMem, size);
+}
+#else
 void *_realloc_base( void *pMem, size_t nSize )
 {
 	return ReallocUnattributed( pMem, nSize );
 }
+#endif
 
+#if _MSC_VER >= 1900
+__declspec(restrict) void *_recalloc_base(void *pMem, size_t count, size_t size)
+{
+	void *pMemOut = ReallocUnattributed(pMem, count * size);
+
+	size_t oldSize = _msize(pMem);
+	if (oldSize < (count * size))
+		memset((char*)pMemOut + oldSize, 0, (count * size) - oldSize);
+
+	return pMemOut;
+}
+#else
 void *_recalloc_base( void *pMem, size_t nSize )
 {
 	void *pMemOut = ReallocUnattributed( pMem, nSize );
 	memset(pMemOut, 0, nSize);
 	return pMemOut;
 }
+#endif
 
 void _free_base( void *pMem )
 {
@@ -200,7 +241,11 @@ void * __cdecl _malloc_crt(size_t size)
 
 void * __cdecl _calloc_crt(size_t count, size_t size)
 {
+#if _MSC_VER >= 1900
+	return _calloc_base(count, size);
+#else
 	return _calloc_base( count * size );
+#endif
 }
 
 void * __cdecl _realloc_crt(void *ptr, size_t size)
@@ -210,7 +255,7 @@ void * __cdecl _realloc_crt(void *ptr, size_t size)
 
 void * __cdecl _recalloc_crt(void *ptr, size_t count, size_t size)
 {
-	return _recalloc_base( ptr, size * count );
+	return _recalloc_base( ptr, count, size );
 }
 
 ALLOC_CALL void * __cdecl _recalloc ( void * memblock, size_t count, size_t size )
@@ -633,16 +678,18 @@ int _CrtSetDbgFlag( int nNewFlag )
 #define AFNAME(var) __p_ ## var
 #define AFRET(var)  &var
 
-int _crtDbgFlag = _CRTDBG_ALLOC_MEM_DF;
+//int _crtDbgFlag = _CRTDBG_ALLOC_MEM_DF;
 int* AFNAME(_crtDbgFlag)(void)
 {
-	return AFRET(_crtDbgFlag);
+	static auto asdf = _CRTDBG_ALLOC_MEM_DF;
+	return &asdf;
 }
 
 long _crtBreakAlloc;      /* Break on this allocation */
 long* AFNAME(_crtBreakAlloc) (void)
 {
-	return AFRET(_crtBreakAlloc);
+	static long asdf;
+	return &asdf;
 }
 
 void __cdecl _CrtSetDbgBlockType( void *pMem, int nBlockUse )
@@ -715,8 +762,11 @@ void __cdecl _CrtDoForAllClientObjects( void (*pfn)(void *, void *), void * pCon
 //-----------------------------------------------------------------------------
 // Methods in dbgrpt.cpp 
 //-----------------------------------------------------------------------------
+#if _MSC_VER < 1900
 long _crtAssertBusy = -1;
+#endif
 
+#if _MSC_VER < 1900
 int __cdecl _CrtSetReportMode( int nReportType, int nReportMode )
 {
 	return g_pMemAlloc->CrtSetReportMode( nReportType, nReportMode );
@@ -731,7 +781,9 @@ _CRT_REPORT_HOOK __cdecl _CrtSetReportHook( _CRT_REPORT_HOOK pfnNewHook )
 {
 	return (_CRT_REPORT_HOOK)g_pMemAlloc->CrtSetReportHook( pfnNewHook );
 }
+#endif
 
+#if _MSC_VER < 1900
 int __cdecl _CrtDbgReport( int nRptType, const char * szFile,
         int nLine, const char * szModule, const char * szFormat, ... )
 {
@@ -750,6 +802,7 @@ int __cdecl _CrtDbgReport( int nRptType, const char * szFile,
 
 	return g_pMemAlloc->CrtDbgReport( nRptType, szFile, nLine, szModule, output );
 }
+#endif
 
 #if _MSC_VER >= 1400
 
@@ -877,6 +930,7 @@ void __cdecl _invalid_parameter_noinfo(void)
 
 #if defined( _DEBUG ) || defined( USE_MEM_DEBUG )
 
+#if _MSC_VER < 1900
 int __cdecl __crtMessageWindowW( int nRptType, const wchar_t * szFile, const wchar_t * szLine,
 								 const wchar_t * szModule, const wchar_t * szUserMessage )
 {
@@ -910,7 +964,7 @@ int __cdecl _CrtSetReportHook2( int mode, _CRT_REPORT_HOOK pfnNewHook )
 	_CrtSetReportHook( pfnNewHook );
 	return 0;
 }
- 
+#endif 
 
 #endif  /* defined( _DEBUG ) || defined( USE_MEM_DEBUG ) */
 
@@ -931,8 +985,14 @@ extern "C" int __cdecl _CrtGetCheckCount( void )
 extern "C" void * __cdecl _aligned_offset_recalloc_dbg( void * memblock, size_t count, size_t size, size_t align, size_t offset, const char * f_name, int line_n )
 {
 	Assert( IsPC() || 0 );
+
+	size_t originalSize = memblock ? _msize(memblock) : 0;
+
 	void *pMem = ReallocUnattributed( memblock, size * count );
-	memset( pMem, 0, size * count );
+
+	if (originalSize < (count * size))
+		memset( (char*)pMem + originalSize, 0, (size * count) - originalSize );
+
 	return pMem;
 }
 
@@ -946,10 +1006,12 @@ extern "C" void * __cdecl _recalloc_dbg ( void * memblock, size_t count, size_t 
 	return _aligned_offset_recalloc_dbg(memblock, count, size, 0, 0, szFileName, nLine);
 }
 
+#if _MSC_VER < 1900
 _CRT_REPORT_HOOK __cdecl _CrtGetReportHook( void )
 {
 	return NULL;
 }
+#endif
 
 #endif
 int __cdecl _CrtReportBlockType(const void * pUserData)
@@ -1074,11 +1136,13 @@ void __cdecl _aligned_free_dbg( void * memblock)
     _aligned_free(memblock);
 }
 
+#if _MSC_VER < 1900
 size_t __cdecl _CrtSetDebugFillThreshold( size_t _NewDebugFillThreshold)
 {
 	assert(0);
     return 0;
 }
+#endif
 
 //===========================================
 // NEW!!! 64-bit
@@ -1384,10 +1448,10 @@ struct _tiddata {
 
     /* pointer to the copy of the multibyte character information used by
      * the thread */
-    pthreadmbcinfo  ptmbcinfo;
+	mbstate_t  ptmbcinfo;
 
     /* pointer to the copy of the locale informaton used by the thead */
-    pthreadlocinfo  ptlocinfo;
+    _locale_t  ptlocinfo;
     int         _ownlocale;     /* if 1, this thread owns its own locale */
 
     /* following field is needed by NLG routines */
@@ -1551,7 +1615,7 @@ typedef struct _tiddata * _ptiddata;
 
 class _LocaleUpdate
 {
-    _locale_tstruct localeinfo;
+    __crt_locale_pointers localeinfo;
     _ptiddata ptd;
     bool updated;
     public:
