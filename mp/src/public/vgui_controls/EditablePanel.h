@@ -72,10 +72,12 @@ public:
 	virtual void SetControlEnabled(const char *controlName, bool enabled);
 	virtual void SetControlVisible(const char *controlName, bool visible);
 
+	virtual void UnknownFn() { }
+
 	// localization variables (used in constructing UI strings)
 	// after the variable is set, causes all the necessary sub-panels to update
 	virtual void SetDialogVariable(const char *varName, const char *value);
-	virtual void SetDialogVariable(const char *varName, const wchar_t *value);
+	virtual void SetDialogVariable(const char *varName, const wchar_t *value);	// Expected vtable offset: 229
 	virtual void SetDialogVariable(const char *varName, int value);
 	virtual void SetDialogVariable(const char *varName, float value);
 
