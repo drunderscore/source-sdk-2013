@@ -1,0 +1,28 @@
+#include "common_ps_fxc.h"
+
+const float4 gInput1 : register( c0 );
+sampler TexSampler	: register( s0 );
+
+#define ALPHA_SCALE gInput1.x
+#define INPUT_RANGE_MIN gInput1.y
+#define INPUT_RANGE_MAX gInput1.z
+
+struct PS_INPUT
+{
+	float2 baseTexCoord				: TEXCOORD0;
+};
+
+float4 main(PS_INPUT i) : COLOR
+{
+  float4 sample = tex2D(TexSampler, i.baseTexCoord);
+
+  float maxColor = max(sample.r, max(sample.g, sample.b));
+
+  sample.rgb *= 1.0f / maxColor;
+
+  float alpha = sample.a * ALPHA_SCALE;
+  alpha = (alpha - INPUT_RANGE_MIN) / (INPUT_RANGE_MAX - INPUT_RANGE_MIN);
+  alpha = saturate(alpha);
+
+  return float4(sample.rgb, alpha);
+}

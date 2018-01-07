@@ -25,7 +25,7 @@ set shadercompilecommand=shadercompile.exe
 set targetdir=shaders
 set SrcDirBase=..\..
 set shaderDir=shaders
-set SDKArgs=
+set SDKArgs=-nompi
 set SHADERINCPATH=vshtmp9/... fxctmp9/...
 
 
@@ -180,7 +180,7 @@ set shader_path_cd=%cd%
 if exist "filelist.txt" if exist "uniquefilestocopy.txt" if not "%dynamic_shaders%" == "1" (
 	echo Running distributed shader compilation...
 
-	cd /D %ChangeToDir%
+	cd /D "%ChangeToDir%"
 	echo %shadercompilecommand% %SDKArgs% -shaderpath "%shader_path_cd:/=\%" -allowdebug
 	%shadercompilecommand% %SDKArgs% -shaderpath "%shader_path_cd:/=\%" -allowdebug
 	cd /D %shader_path_cd%
