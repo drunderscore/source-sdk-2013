@@ -14,9 +14,10 @@
 #include "utlvector.h"
 #include "mathlib/vector.h"
 
+#include "c_baseentity.h"
+
 #ifdef GLOWS_ENABLE
 
-class C_BaseEntity;
 class CViewSetup;
 class CMatRenderContextPtr;
 
