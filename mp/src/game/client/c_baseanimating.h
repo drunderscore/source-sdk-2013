@@ -490,6 +490,7 @@ public:
 	// Object bodygroup
 	int								m_nBody;
 
+	uint8_t _CEPADDING0[55];
 	// Hitbox set to use (default 0)
 	int								m_nHitboxSet;
 
@@ -621,6 +622,7 @@ private:
 
 	// Dynamic models
 	bool							m_bDynamicModelAllowed;
+	uint8_t _CEPADDING1[1];
 	bool							m_bDynamicModelPending;
 	bool							m_bResetSequenceInfoOnLoad;
 	CRefCountedModelIndex			m_AutoRefModelIndex;
@@ -636,6 +638,8 @@ private:
 	mutable CStudioHdr				*m_pStudioHdr;
 	mutable MDLHandle_t				m_hStudioHdr;
 	CThreadFastMutex				m_StudioHdrInitLock;
+
+	friend class OffsetChecking;
 };
 
 enum 
