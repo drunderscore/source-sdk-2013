@@ -922,6 +922,8 @@ private:
 
 	static Panel* m_sMousePressedPanels[ ( MOUSE_MIDDLE - MOUSE_LEFT ) + 1 ];
 
+	uint8_t _CEPADDING0[44];
+
 	CPanelAnimationVar( float, m_flAlpha, "alpha", "255" );
 
 	// 1 == Textured (TextureId1 only)
@@ -946,6 +948,8 @@ private:
 
 	// obselete, remove soon
 	void OnOldMessage(KeyValues *params, VPANEL ifromPanel);
+
+	friend class OffsetChecking;
 };
 
 inline void Panel::DisableMouseInputForThisPanel( bool bDisable )

@@ -85,6 +85,8 @@ private:
 	Color m_FillColor;
 	Color m_DrawColor;
 	int m_iRotation;
+
+	friend class OffsetChecking;
 };
 
 } // namespace vgui

@@ -83,6 +83,8 @@ private:
 	int m_iBarInset;
 	int m_iBarMargin;
 	char *m_pszDialogVar;
+
+	friend class OffsetChecking;
 };
 
 //-----------------------------------------------------------------------------
@@ -97,6 +99,13 @@ public:
 	~ContinuousProgressBar() { }
 
 	virtual void Paint();
+
+private:
+	float _unknown0;
+	int _unknown1;
+	int _unknown2;
+
+	friend class OffsetChecking;
 };
 
 } // namespace vgui
