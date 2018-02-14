@@ -1274,12 +1274,12 @@ void Panel::PaintTraverse( bool repaint, bool allowForce )
 			for (int i=0; i < controlGroup->Size(); ++i)
 			{
 				// outline all selected panels 
-				CUtlVector<PHandle> *controlGroup = _buildGroup->GetControlGroup();
-				for (int i=0; i < controlGroup->Size(); ++i)
+				CUtlVector<PHandle> *controlGroup2 = _buildGroup->GetControlGroup();
+				for (int k=0; k < controlGroup2->Size(); ++k)
 				{
-					surface()->PushMakeCurrent( ((*controlGroup)[i].Get())->GetVPanel(), false );
-					((*controlGroup)[i].Get())->PaintBuildOverlay();
-					surface()->PopMakeCurrent( ((*controlGroup)[i].Get())->GetVPanel() );
+					surface()->PushMakeCurrent( ((*controlGroup2)[k].Get())->GetVPanel(), false );
+					((*controlGroup2)[k].Get())->PaintBuildOverlay();
+					surface()->PopMakeCurrent( ((*controlGroup2)[k].Get())->GetVPanel() );
 				}	
 			
 				_buildGroup->DrawRulers();						
@@ -6983,8 +6983,8 @@ void Panel::OnFinishDragging( bool mousereleased, MouseCode code, bool abort /*=
 				if ( pHover )
 				{
 					// Figure out if it's a menu item...
-					int c = menu->GetItemCount();
-					for ( int i = 0; i < c; ++i )
+					int count = menu->GetItemCount();
+					for ( int i = 0; i < count; ++i )
 					{
 						int id = menu->GetMenuID( i );
 						MenuItem *item = menu->GetMenuItem( id );
@@ -7386,8 +7386,8 @@ VPANEL CDragDropHelperPanel::IsWithinTraverse(int x, int y, bool traversePopups)
 
 void CDragDropHelperPanel::PostChildPaint()
 {
-	int c = m_PaintList.Count();
-	for ( int i = c - 1; i >= 0 ; --i )
+	const int count = m_PaintList.Count();
+	for ( int i = count - 1; i >= 0 ; --i )
 	{
 		DragHelperPanel_t& data = m_PaintList[ i ];
 
@@ -7408,13 +7408,13 @@ void CDragDropHelperPanel::PostChildPaint()
 			else
 			{
 				CUtlVector< Panel * > temp;
-				CUtlVector< PHandle >& data = panel->GetDragDropInfo()->m_DragPanels;
+				CUtlVector< PHandle >& data2 = panel->GetDragDropInfo()->m_DragPanels;
 				CUtlVector< KeyValues * >& msglist = panel->GetDragDropInfo()->m_DragData;
-				int i, c;
-				c = data.Count();
-				for ( i = 0; i < c ; ++i )
+				int k, c;
+				c = data2.Count();
+				for ( k = 0; k < c ; ++k )
 				{
-					Panel *pPanel = data[ i ].Get();
+					Panel *pPanel = data2[ k ].Get();
 					if ( pPanel )
 					{
 						temp.AddToTail( pPanel );
@@ -7426,7 +7426,7 @@ void CDragDropHelperPanel::PostChildPaint()
 		}
 	}
 
-	if ( c == 0 )
+	if (count == 0 )
 	{
 		MarkForDeletion();
 	}
@@ -7595,7 +7595,7 @@ void Panel::OnDraggablePanelPaint()
 		surface()->DrawSetTextPos( x + 5, y + 2 );
 
 		wchar_t sz[ 64 ];
-		V_swprintf_safe( sz, L"[ %i ]", m_pDragDrop->m_DragPanels.Count() );
+		V_swprintf_safe( sz, L"[ %k ]", m_pDragDrop->m_DragPanels.Count() );
 
 		surface()->DrawPrintText( sz, wcslen( sz ) );
 	}
