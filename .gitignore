@@ -65,3 +65,5 @@ mp/src/materialsystem/stdshaders/makefile.*
 mp/src/materialsystem/stdshaders/vcslist.txt
 mp/src/materialsystem/stdshaders/uniquefilestocopy.txt
 mp/src/materialsystem/stdshaders/nul
+*.pdb
+*.VC.db

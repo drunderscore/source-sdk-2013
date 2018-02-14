@@ -1583,7 +1583,7 @@ void RichText::OnCursorExited()
 //-----------------------------------------------------------------------------
 // Purpose: Handle selection of text by mouse
 //-----------------------------------------------------------------------------
-void RichText::OnCursorMoved(int x, int y)
+void RichText::OnCursorMoved(int _x, int _y)
 {
 	if (_mouseSelection)
 	{

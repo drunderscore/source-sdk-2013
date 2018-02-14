@@ -268,23 +268,23 @@ public:
 				if ( !m_pParent->IsWithin( screenx, screeny ) )
 				{
 					Panel *page = reinterpret_cast< Panel * >( data->GetPtr( "propertypage" ) );
-					PropertySheet *sheet = reinterpret_cast< PropertySheet * >( data->GetPtr( "propertysheet" ) );
+					PropertySheet *sheet2 = reinterpret_cast< PropertySheet * >( data->GetPtr( "propertysheet" ) );
 					char const *title = data->GetString( "tabname", "" );
-					if ( !page || !sheet )
+					if ( !page || !sheet2 )
 						return;
 					
 					// Can only create if sheet was part of a ToolWindow derived object
-					ToolWindow *tw = dynamic_cast< ToolWindow * >( sheet->GetParent() );
+					ToolWindow *tw = dynamic_cast< ToolWindow * >( sheet2->GetParent() );
 					if ( tw )
 					{
 						IToolWindowFactory *factory = tw->GetToolWindowFactory();
 						if ( factory )
 						{
-							bool hasContextMenu = sheet->PageHasContextMenu( page );
-							sheet->RemovePage( page );
-							factory->InstanceToolWindow( tw->GetParent(), sheet->ShouldShowContextButtons(), page, title, hasContextMenu );
+							bool hasContextMenu = sheet2->PageHasContextMenu( page );
+							sheet2->RemovePage( page );
+							factory->InstanceToolWindow( tw->GetParent(), sheet2->ShouldShowContextButtons(), page, title, hasContextMenu );
 
-							if ( sheet->GetNumPages() == 0 )
+							if ( sheet2->GetNumPages() == 0 )
 							{
 								tw->MarkForDeletion();
 							}
@@ -1023,30 +1023,30 @@ void PropertySheet::PerformLayout()
 		{
 			int tabHeight = IsSmallTabs() ? (m_iTabHeightSmall-1) : (m_iTabHeight-1);
 
-            int width, tall;
-            m_PageTabs[i]->GetSize(width, tall);
+            int wide2, tall2;
+            m_PageTabs[i]->GetSize(wide2, tall2);
 
 			if ( m_bTabFitText )
 			{
 				m_PageTabs[i]->SizeToContents();
-				width = m_PageTabs[i]->GetWide();
+				wide2 = m_PageTabs[i]->GetWide();
 
 				int iXInset, iYInset;
 				m_PageTabs[i]->GetTextInset( &iXInset, &iYInset );
-				width += (iXInset * 2);
+				wide2 += (iXInset * 2);
 			}
 
 			if (m_PageTabs[i] == _activeTab)
 			{
 				// active tab is taller
-				_activeTab->SetBounds(xtab, 2, width, tabHeight);
+				_activeTab->SetBounds(xtab, 2, wide2, tabHeight);
 			}
 			else
 			{
-				m_PageTabs[i]->SetBounds(xtab, 4, width, tabHeight - 2);
+				m_PageTabs[i]->SetBounds(xtab, 4, wide2, tabHeight - 2);
 			}
 			m_PageTabs[i]->SetVisible(true);
-			xtab += (width + 1) + m_iTabXDelta;
+			xtab += (wide2 + 1) + m_iTabXDelta;
 		}
 	}
 	else
