@@ -1,6 +1,6 @@
 //========= Copyright Valve Corporation, All rights reserved. ============//
 //
-// Purpose: 
+// Purpose:
 //
 // $NoKeywords: $
 //=============================================================================//
@@ -23,7 +23,7 @@ public:
 	constexpr Color() : _color { (unsigned char)0, (unsigned char)0, (unsigned char)0, (unsigned char)0 } { }
 	constexpr Color(int _r, int _g, int _b) : _color { (unsigned char)_r, (unsigned char)_g, (unsigned char)_b, (unsigned char)0 } { }
 	constexpr Color(int _r, int _g, int _b, int _a) : _color { (unsigned char)_r, (unsigned char)_g, (unsigned char)_b, (unsigned char)_a } { }
-	
+
 	// set the color
 	// r - red component (0-255)
 	// g - green component (0-255)
@@ -59,7 +59,12 @@ public:
 	inline int g() const	{ return _color[1]; }
 	inline int b() const	{ return _color[2]; }
 	inline int a() const	{ return _color[3]; }
-	
+
+	inline auto& r() { return _color[0]; }
+	inline auto& g() { return _color[1]; }
+	inline auto& b() { return _color[2]; }
+	inline auto& a() { return _color[3]; }
+
 	unsigned char &operator[](int index)
 	{
 		return _color[index];
