@@ -55,6 +55,9 @@ public:
 		return *((int *)this);
 	}
 
+	const unsigned char* GetRawColorPtr() const { return _color; }
+	unsigned char* GetRawColorPtr() { return _color; }
+
 	inline int r() const	{ return _color[0]; }
 	inline int g() const	{ return _color[1]; }
 	inline int b() const	{ return _color[2]; }
