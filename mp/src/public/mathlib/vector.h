@@ -71,8 +71,8 @@ public:
 
 	// Construction/destruction:
 	Vector(void); 
-	Vector(vec_t X, vec_t Y, vec_t Z);
-	explicit Vector(vec_t XYZ); ///< broadcast initialize
+	constexpr Vector(vec_t X, vec_t Y, vec_t Z);
+	explicit constexpr Vector(vec_t XYZ); ///< broadcast initialize
 
 	// Initialization
 	void Init(vec_t ix=0.0f, vec_t iy=0.0f, vec_t iz=0.0f);
@@ -511,15 +511,13 @@ inline Vector::Vector(void)
 #endif
 }
 
-inline Vector::Vector(vec_t X, vec_t Y, vec_t Z)						
-{ 
-	x = X; y = Y; z = Z;
+inline constexpr Vector::Vector(vec_t X, vec_t Y, vec_t Z) : x(X), y(Y), z(Z)
+{
 	CHECK_VALID(*this);
 }
 
-inline Vector::Vector(vec_t XYZ)						
-{ 
-	x = y = z = XYZ;
+inline constexpr Vector::Vector(vec_t XYZ) : x(XYZ), y(XYZ), z(XYZ)
+{
 	CHECK_VALID(*this);
 }
 
