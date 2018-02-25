@@ -83,8 +83,8 @@ public:
 	void Invalidate();
 
 	// array access...
-	vec_t operator[](int i) const;
-	vec_t& operator[](int i);
+	constexpr vec_t operator[](int i) const;
+	constexpr vec_t& operator[](int i);
 
 	// Base address...
 	vec_t* Base();
@@ -584,13 +584,13 @@ inline Vector& Vector::operator=(const Vector &vOther)
 //-----------------------------------------------------------------------------
 // Array access
 //-----------------------------------------------------------------------------
-inline vec_t& Vector::operator[](int i)
+__forceinline constexpr vec_t& Vector::operator[](int i)
 {
 	Assert( (i >= 0) && (i < 3) );
 	return ((vec_t*)this)[i];
 }
 
-inline vec_t Vector::operator[](int i) const
+__forceinline constexpr vec_t Vector::operator[](int i) const
 {
 	Assert( (i >= 0) && (i < 3) );
 	return ((vec_t*)this)[i];
