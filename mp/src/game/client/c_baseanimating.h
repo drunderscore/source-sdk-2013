@@ -490,7 +490,7 @@ public:
 	// Object bodygroup
 	int								m_nBody;
 
-	uint8_t _CEPADDING0[55];
+	uint8_t _CEPADDING0[21];
 	// Hitbox set to use (default 0)
 	int								m_nHitboxSet;
 
