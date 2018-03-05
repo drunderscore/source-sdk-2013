@@ -46,8 +46,10 @@
 // SendProp::m_Flags.
 #define SPROP_UNSIGNED			(1<<0)	// Unsigned integer data.
 
+#ifndef SPROP_COORD
 #define SPROP_COORD				(1<<1)	// If this is set, the float/vector is treated like a world coordinate.
 										// Note that the bit count is ignored in this case.
+#endif
 
 #define SPROP_NOSCALE			(1<<2)	// For floating point, don't scale into range, just take value as is.
 
