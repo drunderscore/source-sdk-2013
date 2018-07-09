@@ -490,7 +490,6 @@ public:
 	// Object bodygroup
 	int								m_nBody;
 
-	uint8_t _CEPADDING0[21];
 	// Hitbox set to use (default 0)
 	int								m_nHitboxSet;
 
@@ -622,7 +621,7 @@ private:
 
 	// Dynamic models
 	bool							m_bDynamicModelAllowed;
-	uint8_t _CEPADDING1[1];
+	PADDING(1);
 	bool							m_bDynamicModelPending;
 	bool							m_bResetSequenceInfoOnLoad;
 	CRefCountedModelIndex			m_AutoRefModelIndex;

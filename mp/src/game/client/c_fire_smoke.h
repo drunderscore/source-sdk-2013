@@ -13,6 +13,9 @@
 #include "glow_overlay.h"
 #include "view.h"
 #include "particle_litsmokeemitter.h"
+#include "../../public/vstdlib/random.h"
+
+extern IUniformRandomStream* random;
 
 class CFireOverlay;
 

@@ -1566,6 +1566,7 @@ private:
 	unsigned char					m_nWaterType;
 	// For client/server entities, true if the entity goes outside the PVS.
 	// Unused for client only entities.
+	PADDING(24);
 	bool							m_bDormant;
 	// Prediction system
 	bool							m_bPredictable;
@@ -1704,6 +1705,8 @@ protected:
 	RenderMode_t m_PreviousRenderMode;
 	color32 m_PreviousRenderColor;
 #endif
+
+	friend class OffsetChecking;
 };
 
 EXTERN_RECV_TABLE(DT_BaseEntity);

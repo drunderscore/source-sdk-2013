@@ -108,6 +108,8 @@ public:
 	void				DebugPrintEffects( void );
 
 	int					FindEffect( const char *pEffectName, int nStart = 0 );
+
+	int                 GetParticleEffectCount() { return m_ParticleEffects.Count(); }
 	inline CNewParticleEffect *GetParticleEffectFromIdx( int idx );
 
 private:
