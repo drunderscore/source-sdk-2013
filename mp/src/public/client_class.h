@@ -61,7 +61,7 @@ public:
 		g_pClientClassHead	= this;
 	}
 
-	const char* GetName()
+	const char* GetName() const
 	{
 		return m_pNetworkName;
 	}

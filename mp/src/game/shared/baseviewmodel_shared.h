@@ -30,6 +30,8 @@ class CVGuiScreen;
 
 class CBaseViewModel : public CBaseAnimating, public IHasOwner
 {
+	PADDING(8);
+
 	DECLARE_CLASS( CBaseViewModel, CBaseAnimating );
 public:
 
@@ -205,6 +207,8 @@ private:
 	// Control panel
 	typedef CHandle<CVGuiScreen>	ScreenHandle_t;
 	CUtlVector<ScreenHandle_t>	m_hScreens;
+
+	friend class OffsetChecking;
 };
 
 #endif // BASEVIEWMODEL_SHARED_H

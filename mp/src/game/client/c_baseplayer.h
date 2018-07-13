@@ -448,7 +448,7 @@ public:
 	float			m_flConstraintWidth;
 	float			m_flConstraintSpeedFactor;
 
-protected:
+//protected:
 
 	void				CalcPlayerView( Vector& eyeOrigin, QAngle& eyeAngles, float& fov );
 	void				CalcVehicleView(IClientVehicle *pVehicle, Vector& eyeOrigin, QAngle& eyeAngles,
@@ -476,7 +476,7 @@ protected:
 
 	virtual void	FireGameEvent( IGameEvent *event );
 
-protected:
+//protected:
 	// Did we just enter a vehicle this frame?
 	bool			JustEnteredVehicle();
 
@@ -493,7 +493,7 @@ protected:
 	float			m_flStepSoundTime;
 	bool			m_IsFootprintOnLeft;
 
-private:
+//private:
 	// Make sure no one calls this...
 	C_BasePlayer& operator=( const C_BasePlayer& src );
 	C_BasePlayer( const C_BasePlayer & ); // not defined, not accessible
