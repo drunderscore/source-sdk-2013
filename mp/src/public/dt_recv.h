@@ -184,7 +184,7 @@ public:
 	int			GetNumProps();
 	RecvProp*	GetProp( int i );
 
-	const char*	GetName();
+	const char*	GetName() const;
 
 	// Used by the engine while initializing array props.
 	void		SetInitialized( bool bInitialized );
@@ -226,7 +226,7 @@ inline RecvProp* RecvTable::GetProp( int i )
 	return &m_pProps[i]; 
 }
 
-inline const char* RecvTable::GetName()
+inline const char* RecvTable::GetName() const
 {
 	return m_pNetTableName; 
 }

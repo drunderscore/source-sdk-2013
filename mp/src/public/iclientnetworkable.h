@@ -51,6 +51,7 @@ public:
 	virtual void			Release() = 0;
 
 	// Supplied automatically by the IMPLEMENT_CLIENTCLASS macros.
+	__forceinline const ClientClass* GetClientClass() const { return const_cast<IClientNetworkable*>(this)->GetClientClass(); }
 	virtual ClientClass*	GetClientClass() = 0;
 
 	// This tells the entity what the server says for ShouldTransmit on this entity.
@@ -94,6 +95,7 @@ public:
 
 	// Get the base pointer to the networked data that GetClientClass->m_pRecvTable starts at.
 	// (This is usually just the "this" pointer).
+	__forceinline const void* GetDataTableBasePtr() const { return const_cast<IClientNetworkable*>(this)->GetDataTableBasePtr(); }
 	virtual void*			GetDataTableBasePtr() = 0;
 
 	// Tells the entity that it's about to be destroyed due to the client receiving
