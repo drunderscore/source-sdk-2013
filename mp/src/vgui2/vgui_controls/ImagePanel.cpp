@@ -101,23 +101,7 @@ IImage *ImagePanel::GetImage()
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-Color ImagePanel::GetDrawColor( void )
-{
-	return m_DrawColor;
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-void ImagePanel::SetDrawColor( Color drawColor )
-{
-	m_DrawColor = drawColor;
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void ImagePanel::PaintBackground()
 {
@@ -405,22 +389,6 @@ void ImagePanel::SetScaleAmount( float scale )
 float ImagePanel::GetScaleAmount( void )
 {
 	return m_fScaleAmount;
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: set the color to fill with, if no Image is specified
-//-----------------------------------------------------------------------------
-void ImagePanel::SetFillColor( Color col )
-{
-	m_FillColor = col;
-}
-
-//-----------------------------------------------------------------------------
-// Purpose: data accessor
-//-----------------------------------------------------------------------------
-Color ImagePanel::GetFillColor()
-{
-	return m_FillColor;
 }
 
 char *ImagePanel::GetImageName()

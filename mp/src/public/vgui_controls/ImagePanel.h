@@ -47,11 +47,11 @@ public:
 	void SetTileImage( bool bTile )	{ m_bTileImage = bTile; }
 
 	// set the color to fill with, if no image is specified
-	void SetFillColor( Color col );
-	Color GetFillColor();
+	void SetFillColor(Color col) { m_FillColor = col; }
+	const Color& GetFillColor() { return m_FillColor; }
 
-	virtual Color GetDrawColor( void );
-	virtual void SetDrawColor( Color drawColor );
+	virtual Color GetDrawColor(void) { return m_DrawColor; }
+	virtual void SetDrawColor(Color drawColor) { m_DrawColor = drawColor; }
 
 	virtual void ApplySettings(KeyValues *inResourceData);
 
