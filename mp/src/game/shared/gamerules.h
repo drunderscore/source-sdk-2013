@@ -16,8 +16,9 @@
 
 #ifdef CLIENT_DLL
 
-	#include "c_baseentity.h"
-	
+	#include <shared/baseentity_shared.h>
+	#include <client/c_baseentity.h>
+
 	#define CGameRules C_GameRules
 	#define CGameRulesProxy C_GameRulesProxy
 
