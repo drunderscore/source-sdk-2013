@@ -14,6 +14,8 @@
 #endif
 
 #include "baseentity.h"
+#include <shared/entitylist_base.h>
+#include <shared/predictioncopy.h>
 
 class IEntityListener;
 

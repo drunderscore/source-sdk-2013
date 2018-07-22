@@ -15,14 +15,20 @@
 
 #include "entitylist.h"
 #include "entityoutput.h"
-#include "networkvar.h"
+#include <networkvar.h>
 #include "collisionproperty.h"
 #include "ServerNetworkProperty.h"
+//#include <shared/baseentity_shared.h>
+#include <shared/groundlink.h>
+#include <shared/predictableid.h>
+#include <shared/touchlink.h>
 #include "shareddefs.h"
 #include "engine/ivmodelinfo.h"
+#include "variant_t.h"
 
 class CDamageModifier;
 class CDmgAccumulator;
+class CTakeDamageInfo;
 
 struct CSoundParameters;
 

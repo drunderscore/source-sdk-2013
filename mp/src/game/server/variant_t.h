@@ -12,8 +12,8 @@
 #endif
 
 
-#include "ehandle.h"
 #include "mathlib/vmatrix.h"
+#include <shared/ehandle.h>
 
 class CBaseEntity;
 

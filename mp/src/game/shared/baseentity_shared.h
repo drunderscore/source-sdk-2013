@@ -11,6 +11,8 @@
 #pragma once
 #endif
 
+#include <convar.h>
+
 
 extern ConVar hl2_episodic;
 
@@ -60,7 +62,7 @@ enum InvalidatePhysicsBits_t
 #include "../client/c_baseentity.h"
 #include "../client/c_baseanimating.h"
 #else
-#include "baseentity.h"
+#include <server/baseentity.h>
 
 #ifdef HL2_EPISODIC
 	#include "info_darknessmode_lightsource.h"

@@ -16,6 +16,7 @@
 #include "networkvar.h"
 #include "engine/IEngineTrace.h"
 #include "engine/IStaticPropMgr.h"
+#include <shared/shareddefs.h>
 #include "shared_classnames.h"
 
 #ifdef CLIENT_DLL

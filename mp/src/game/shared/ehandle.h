@@ -12,8 +12,8 @@
 #endif
 
 #if defined( _DEBUG ) && defined( GAME_DLL )
-#include "tier0/dbg.h"
-#include <server/cbase.h>
+//#include "tier0/dbg.h"
+//#include <server/cbase.h>
 #endif
 
 

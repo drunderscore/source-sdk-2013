@@ -15,9 +15,12 @@
 
 
 #include "baseentity.h"
-
+#include <server/variant_t.h>
 
 #define EVENT_FIRE_ALWAYS	-1
+
+class ISave;
+class IRestore;
 
 
 //-----------------------------------------------------------------------------

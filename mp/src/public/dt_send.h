@@ -265,8 +265,8 @@ public:
 
 	const char		*m_pVarName;
 	float			m_fHighLowMul;
-	
-private:
+
+public:
 
 	int					m_Flags;				// SPROP_ flags.
 
