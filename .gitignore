@@ -67,3 +67,4 @@ mp/src/materialsystem/stdshaders/uniquefilestocopy.txt
 mp/src/materialsystem/stdshaders/nul
 *.pdb
 *.VC.db
+mp/src/materialsystem/stdshaders/fxctmp9/

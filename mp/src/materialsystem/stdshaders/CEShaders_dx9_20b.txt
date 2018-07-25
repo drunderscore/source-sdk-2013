@@ -1,2 +1,1 @@
-ce_alpha_multiply_ps2x.fxc
 ce_outline_pass_ps2x.fxc
