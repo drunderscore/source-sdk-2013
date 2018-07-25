@@ -23,6 +23,8 @@
 
 #include "game/client/iclientrendertargets.h"		// base class with interfaces called by the engine
 #include "materialsystem/imaterialsystem.h"		// for material system classes and interfaces
+#include <materialsystem/MaterialSystemUtil.h>
+#include <networkvar.h>
 
 
 // Externs
@@ -39,8 +41,8 @@ public:
 	// Shutdown all custom render targets here.
 	virtual void ShutdownClientRenderTargets ( void );
 
-protected:
-	
+//protected:
+
 	// Standard render textures used by most mods-- Classes inheriting from
 	// this can choose to init these or not depending on their needs.
 
