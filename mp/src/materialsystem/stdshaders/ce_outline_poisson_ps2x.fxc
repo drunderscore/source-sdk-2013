@@ -1,0 +1,56 @@
+#include "common_ps_fxc.h"
+
+const float4 gInput1 : register( c0 );
+sampler TexSampler	: register( s0 );
+
+#define PIXEL_SIZE_X gInput1.x
+#define PIXEL_SIZE_Y gInput1.y
+#define PIXEL_SIZE_XY (gInput1.xy)
+#define RADIUS gInput1.z
+
+#ifdef SHADER_MODEL_PS_2_0
+static const int SAMPLE_COUNT = 11;
+#elif defined(SHADER_MODEL_PS_2_B)
+static const int SAMPLE_COUNT = 16;
+#endif
+
+static const float2 POISSON_DISK[] =
+{
+	float2(0.2770745f, 0.6951455f),
+	float2(0.1874257f, -0.02561589f),
+	float2(-0.3381929f, 0.8713168f),
+	float2(0.5867746f, 0.1087471f),
+	float2(-0.3078699f, 0.188545f),
+	float2(0.7993396f, 0.4595091f),
+	float2(-0.09242552f, 0.5260149f),
+	float2(0.3657553f, -0.5329605f),
+	float2(-0.3829718f, -0.2476171f),
+	float2(-0.01085108f, -0.6966301f),
+	float2(0.8404155f, -0.3543923f),
+	float2(-0.5186161f, -0.7624033f),
+	float2(-0.8135794f, 0.2328489f),
+	float2(-0.784665f, -0.2434929f),
+	float2(0.9920505f, 0.0855163f),
+	float2(-0.687256f, 0.6711345f)
+};
+
+struct PS_INPUT
+{
+	float2 baseTexCoord    : TEXCOORD0;
+};
+
+float4 main(PS_INPUT i) : COLOR
+{
+	float maxAlpha = 0;
+	float3 sampleSum = 0;
+	float2 sampleScalar = PIXEL_SIZE_XY * RADIUS;
+	for (int s = 0; s < SAMPLE_COUNT; s++)
+	{
+		float4 smpl = tex2D(TexSampler, i.baseTexCoord + POISSON_DISK[s] * sampleScalar);
+
+		sampleSum += normalize(smpl.rgb);
+		maxAlpha = max(maxAlpha, smpl.a);
+	}
+
+	return float4(normalize(sampleSum), maxAlpha);
+}

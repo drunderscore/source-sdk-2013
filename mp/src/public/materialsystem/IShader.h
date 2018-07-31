@@ -51,6 +51,12 @@ class CBasePerMaterialContextData;
 //-----------------------------------------------------------------------------
 struct ShaderParamInfo_t
 {
+	ShaderParamInfo_t() {}
+	constexpr ShaderParamInfo_t(const char* name, const char* help, ShaderParamType_t type, const char* defaultVal, int flags) :
+		m_pName(name), m_pHelp(help), m_Type(type), m_pDefaultValue(defaultVal), m_nFlags(flags)
+	{
+	}
+
 	const char *m_pName;
 	const char *m_pHelp;
 	ShaderParamType_t m_Type;
