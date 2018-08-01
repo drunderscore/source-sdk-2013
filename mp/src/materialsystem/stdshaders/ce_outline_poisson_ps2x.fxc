@@ -1,5 +1,7 @@
 #include "common_ps_fxc.h"
 
+#define ROTATE 0
+
 const float4 gInput1 : register( c0 );
 sampler TexSampler	: register( s0 );
 
@@ -9,7 +11,7 @@ sampler TexSampler	: register( s0 );
 #define RADIUS gInput1.z
 
 #ifdef SHADER_MODEL_PS_2_0
-static const int SAMPLE_COUNT = 11;
+static const int SAMPLE_COUNT = ROTATE ? 6 : 16;
 #elif defined(SHADER_MODEL_PS_2_B)
 static const int SAMPLE_COUNT = 16;
 #endif
@@ -32,6 +34,39 @@ static const float2 POISSON_DISK[] =
 	float2(-0.784665f, -0.2434929f),
 	float2(0.9920505f, 0.0855163f),
 	float2(-0.687256f, 0.6711345f)
+
+	/*float2(0.0854f, -0.0644f),
+	float2(0.8744f, 0.1665f),
+	float2(0.2329f, 0.3995f),
+	float2(-0.7804f, 0.5482f),
+	float2(-0.4577f, 0.7647f),
+	float2(-0.1936f, 0.5564f),
+	float2(0.4205f, -0.5768f),
+	float2(-0.0304f, -0.9050f),
+	float2(-0.5215f, 0.1854f),
+	float2(0.3161f, -0.2954f),
+	float2(0.0666f, -0.5564f),
+	float2(-0.2137f, -0.0072f),
+	float2(-0.4112f, -0.3311f),
+	float2(0.6438f, -0.2484f),
+	float2(-0.9055f, -0.0360f),
+	float2(0.8323f, 0.5268f),
+	float2(0.5592f, 0.3459f),
+	float2(-0.6797f, -0.5201f),
+	float2(-0.4325f, -0.8857f),
+	float2(0.8768f, -0.4197f),
+	float2(0.3090f, -0.8646f),
+	float2(0.5034f, 0.8603f),
+	float2(0.3752f, 0.0627f),
+	float2(-0.0161f, 0.2627f),
+	float2(0.0969f, 0.7054f),
+	float2(-0.2291f, -0.6595f),
+	float2(-0.5887f, -0.1100f),
+	float2(0.7048f, -0.6528f),
+	float2(-0.8438f, 0.2706f),
+	float2(-0.5061f, 0.4653f),
+	float2(-0.1245f, -0.3302f),
+	float2(-0.1801f, 0.8486f),*/
 };
 
 struct PS_INPUT
@@ -39,18 +74,49 @@ struct PS_INPUT
 	float2 baseTexCoord    : TEXCOORD0;
 };
 
+float2 GetPoissonOffset(int index, float2 texCoord)
+{
+	float2 offset = POISSON_DISK[index];
+
+	if (ROTATE)
+	{
+		float s, c;
+		sincos(texCoord.x * 500 + texCoord.y * 1000, s, c);
+
+		offset = mul(offset, float2x2(c, s, -s, c));
+	}
+
+	return offset;
+}
+
 float4 main(PS_INPUT i) : COLOR
 {
 	float maxAlpha = 0;
-	float3 sampleSum = 0;
 	float2 sampleScalar = PIXEL_SIZE_XY * RADIUS;
+#if false
+	float3 sampleSum = 0;
 	for (int s = 0; s < SAMPLE_COUNT; s++)
 	{
 		float4 smpl = tex2D(TexSampler, i.baseTexCoord + POISSON_DISK[s] * sampleScalar);
 
-		sampleSum += normalize(smpl.rgb);
-		maxAlpha = max(maxAlpha, smpl.a);
+		if (smpl.a > 0)
+		{
+			sampleSum += normalize(smpl.rgb);
+			maxAlpha = max(maxAlpha, smpl.a);
+		}
 	}
 
 	return float4(normalize(sampleSum), maxAlpha);
+#else
+	float4 sampleSum = 0;
+	for (int s = 0; s < SAMPLE_COUNT; s++)
+	{
+		float2 poisson = GetPoissonOffset(s, i.baseTexCoord);
+
+		float4 smpl = tex2D(TexSampler, i.baseTexCoord + poisson * sampleScalar);
+		sampleSum += smpl;
+		maxAlpha = max(maxAlpha, smpl.a);
+	}
+	return float4(sampleSum.rgb / sampleSum.a, maxAlpha);
+#endif
 }

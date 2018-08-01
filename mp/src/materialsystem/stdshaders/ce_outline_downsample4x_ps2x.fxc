@@ -1,0 +1,21 @@
+#include "common_ps_fxc.h"
+
+const float4 gInput1 : register( c0 );
+sampler TexSampler	: register( s0 );
+
+#define PIXEL_SIZE (gInput1.xy)
+
+struct PS_INPUT
+{
+	float2 baseTexCoord				: TEXCOORD0;
+};
+
+float4 main(PS_INPUT i) : COLOR
+{
+	float4 sample0 = tex2D(TexSampler, i.baseTexCoord - PIXEL_SIZE);
+	float4 sample1 = tex2D(TexSampler, i.baseTexCoord + PIXEL_SIZE);
+	float4 sample2 = tex2D(TexSampler, i.baseTexCoord + float2(PIXEL_SIZE.x, -PIXEL_SIZE.y));
+	float4 sample3 = tex2D(TexSampler, i.baseTexCoord + float2(-PIXEL_SIZE.x, PIXEL_SIZE.y));
+
+	return (sample0 + sample1 + sample2 + sample3) / 4;
+}

@@ -1,2 +1,6 @@
-ce_outline_pass_ps2x.fxc
 ce_outline_poisson_ps2x.fxc
+ce_outline_downsample4x_ps2x.fxc
+
+ce_outline_gaussian_ps2x.fxc
+
+ce_texture_copy_ps2x.fxc
