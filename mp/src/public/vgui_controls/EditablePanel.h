@@ -31,6 +31,8 @@ public:
 
 	virtual ~EditablePanel();
 
+	virtual void UnknownFn() {}
+
 	// Load the control settings - should be done after all the children are added
 	// If you pass in pPreloadedKeyValues, it won't actually load the file. That way, you can cache
 	// the keyvalues outside of here if you want to prevent file accesses in the middle of the game.
@@ -72,14 +74,14 @@ public:
 	virtual void SetControlEnabled(const char *controlName, bool enabled);
 	virtual void SetControlVisible(const char *controlName, bool visible);
 
-	virtual void UnknownFn() { }
-
 	// localization variables (used in constructing UI strings)
 	// after the variable is set, causes all the necessary sub-panels to update
-	virtual void SetDialogVariable(const char *varName, const char *value);
-	virtual void SetDialogVariable(const char *varName, const wchar_t *value);	// Expected vtable offset: 229
-	virtual void SetDialogVariable(const char *varName, int value);
-	virtual void SetDialogVariable(const char *varName, float value);
+
+	// CE/Pazer note: MSVC reverses the order of these in the vtable for some reason
+	virtual void SetDialogVariable(const char *varName, const char *value);     // vtable: 230
+	virtual void SetDialogVariable(const char *varName, const wchar_t *value);  // vtable: 229
+	virtual void SetDialogVariable(const char *varName, int value);             // vtable: 228
+	virtual void SetDialogVariable(const char *varName, float value);           // vtable: 227
 
 	// Focus handling
 	// Delegate focus to a sub panel

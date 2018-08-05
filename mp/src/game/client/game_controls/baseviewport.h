@@ -10,6 +10,7 @@
 
 // viewport interface for the rest of the dll
 #include <game/client/iviewport.h>
+#include "../hud.h"
 
 #include <utlqueue.h> // a vector based queue template to manage our VGUI menu queue
 #include <vgui_controls/Frame.h>
