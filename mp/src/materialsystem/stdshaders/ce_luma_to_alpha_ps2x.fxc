@@ -1,0 +1,18 @@
+#include "common_ps_fxc.h"
+
+sampler TexSampler : register( s0 );
+
+struct PS_INPUT
+{
+	float2 baseTexCoord				: TEXCOORD0;
+};
+
+float4 main(PS_INPUT i) : COLOR
+{
+	float3 rgb = tex2D(TexSampler, i.baseTexCoord).rgb;
+
+	float luma = 0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b;
+
+	//return float4(luma, luma, luma, 1);
+	return float4(rgb.r, rgb.g, rgb.b, luma);
+}

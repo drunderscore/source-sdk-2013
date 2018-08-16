@@ -4,3 +4,5 @@ ce_outline_downsample4x_ps2x.fxc
 ce_outline_gaussian_ps2x.fxc
 
 ce_texture_copy_ps2x.fxc
+
+ce_luma_to_alpha_ps2x.fxc

@@ -1,0 +1,48 @@
+#include "common_ps_fxc.h"
+
+//#define FXAA_GREEN_AS_LUMA 1
+#define FXAA_DISCARD 1
+#define FXAA_QUALITY__PRESET 15
+#define FXAA_HLSL_3 1
+#define FXAA_PC 1
+#include "ce_Fxaa3_11.h"
+
+sampler2D TexSampler : register( s0 );
+
+const float4 gInput1 : register( c0 );
+const float4 gInput2 : register( c1 );
+
+#define RESOLUTION (gInput1.xy)
+
+struct PS_INPUT
+{
+	float2 baseTexCoord				: TEXCOORD0;
+};
+
+float4 main(PS_INPUT i) : COLOR
+{
+#if false
+	float subpixelAliasingRemoval = gInput1.z;
+	float qualityEdgeThreshold = gInput1.w;
+	float qualityEdgeThresholdMin = gInput2.x;
+#else
+	float subpixelAliasingRemoval = 0.75;
+	float qualityEdgeThreshold = 0.166;
+	float qualityEdgeThresholdMin = 0.0833;
+#endif
+
+	return FxaaPixelShader(
+		// pos
+		i.baseTexCoord,
+
+		// tex
+		TexSampler,
+
+		// fxaaQualityRcpFrame
+		float2(1, 1) / RESOLUTION,
+
+		subpixelAliasingRemoval,
+		qualityEdgeThreshold,
+		qualityEdgeThresholdMin
+	);
+}
