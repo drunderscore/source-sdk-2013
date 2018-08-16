@@ -398,6 +398,7 @@ public:
 	virtual void OnTick();
 
 	// input messages
+	virtual void OnChildRemoved(vgui::Panel*) { Assert(!"Only added to align with 2018 TF2"); }
 	MESSAGE_FUNC_INT_INT( OnCursorMoved, "OnCursorMoved", x, y );
 	virtual void OnCursorEntered();
 	virtual void OnCursorExited();

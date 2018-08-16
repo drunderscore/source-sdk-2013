@@ -31,8 +31,6 @@ public:
 
 	virtual ~EditablePanel();
 
-	virtual void UnknownFn() {}
-
 	// Load the control settings - should be done after all the children are added
 	// If you pass in pPreloadedKeyValues, it won't actually load the file. That way, you can cache
 	// the keyvalues outside of here if you want to prevent file accesses in the middle of the game.
