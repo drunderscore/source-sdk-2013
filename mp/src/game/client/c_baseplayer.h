@@ -418,7 +418,7 @@ public:
 	// Data common to all other players, too
 	CPlayerState			pl;
 
-	uint8_t                 _CEPADDING2[45];
+	PADDING(45);
 
 	// Player FOV values
 	int						m_iFOV;				// field of view

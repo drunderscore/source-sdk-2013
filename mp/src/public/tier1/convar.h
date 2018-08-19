@@ -319,6 +319,7 @@ class ConVar : public ConCommandBase, public IConVar
 {
 friend class CCvar;
 friend class ConVarRef;
+friend class OffsetChecking;
 
 public:
 	typedef ConCommandBase BaseClass;
@@ -411,9 +412,20 @@ private:
 	float						m_fMinVal;
 	bool						m_bHasMax;
 	float						m_fMaxVal;
-	
-	// Call this function when ConVar changes
-	FnChangeCallback_t			m_fnChangeCallback;
+
+	union
+	{
+		struct
+		{
+			// Call this function when ConVar changes
+			FnChangeCallback_t			m_fnChangeCallback;
+		};
+		struct
+		{
+			PADDING(20);
+			FnChangeCallback_t			m_fnChangeCallbackClient;
+		};
+	};
 };
 
 

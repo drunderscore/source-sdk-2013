@@ -82,6 +82,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <BrowseInformationFile>$(IntDir)/</BrowseInformationFile>
       <ErrorReporting>Prompt</ErrorReporting>
+      <ForcedIncludeFiles>$(SolutionDir)CastingEssentials\Misc\Padding.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <PreLinkEvent>
     </PreLinkEvent>
@@ -143,6 +144,7 @@
       <OmitFramePointers>true</OmitFramePointers>
       <OpenMPSupport>false</OpenMPSupport>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <ForcedIncludeFiles>$(SolutionDir)CastingEssentials\Misc\Padding.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <PreLinkEvent>
     </PreLinkEvent>
