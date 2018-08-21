@@ -82,6 +82,10 @@ public:
 	C_BasePlayer();
 	virtual			~C_BasePlayer();
 
+	virtual void GetGlowEffectColor(float& r, float& g, float& b) = 0;
+	virtual void UpdateGlowEffect() = 0;
+	virtual void DestroyGlowEffect() = 0;
+
 	virtual void	Spawn( void );
 	virtual void	SharedSpawn(); // Shared between client and server.
 	virtual bool	GetSteamID( CSteamID *pID );

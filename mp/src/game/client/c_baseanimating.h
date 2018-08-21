@@ -154,6 +154,8 @@ public:
 	virtual bool OnPostInternalDrawModel( ClientModelRenderInfo_t *pInfo );
 	void		DoInternalDrawModel( ClientModelRenderInfo_t *pInfo, DrawModelState_t *pState, matrix3x4_t *pBoneToWorldArray = NULL );
 
+	virtual int GetEconWeaponMaterialOverride() const { return 0; }
+
 	//
 	virtual CMouthInfo *GetMouth();
 	virtual void	ControlMouth( CStudioHdr *pStudioHdr );
