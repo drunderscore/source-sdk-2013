@@ -1537,6 +1537,7 @@ inline AngularImpulse RandomAngularImpulse( float minVal, float maxVal )
 //-----------------------------------------------------------------------------
 
 class RadianEuler;
+class QAngle;
 
 class Quaternion				// same data-layout as engine's vec4_t,
 {								//		which is a vec_t[4]
@@ -1552,6 +1553,7 @@ public:
 	}
 	inline Quaternion(vec_t ix, vec_t iy, vec_t iz, vec_t iw) : x(ix), y(iy), z(iz), w(iw) { }
 	inline Quaternion(RadianEuler const &angle);	// evil auto type promotion!!!
+	explicit Quaternion(const QAngle& angle);
 
 	inline void Init(vec_t ix=0.0f, vec_t iy=0.0f, vec_t iz=0.0f, vec_t iw=0.0f)	{ x = ix; y = iy; z = iz; w = iw; }
 
@@ -1560,6 +1562,8 @@ public:
 
 	bool operator==( const Quaternion &src ) const;
 	bool operator!=( const Quaternion &src ) const;
+
+	Quaternion& NormalizeInPlace();
 
 	vec_t* Base() { return (vec_t*)this; }
 	const vec_t* Base() const { return (vec_t*)this; }
@@ -1571,6 +1575,11 @@ public:
 	vec_t x, y, z, w;
 };
 
+inline Quaternion::Quaternion(const QAngle& angle)
+{
+	extern void AngleQuaternion(const QAngle& angles, Quaternion &qt);
+	AngleQuaternion(angle, *this);
+}
 
 //-----------------------------------------------------------------------------
 // Array access
@@ -1601,6 +1610,12 @@ inline bool Quaternion::operator!=( const Quaternion &src ) const
 	return !operator==( src );
 }
 
+inline Quaternion& Quaternion::NormalizeInPlace()
+{
+	extern float QuaternionNormalize(Quaternion &q);
+	QuaternionNormalize(*this);
+	return *this;
+}
 
 //-----------------------------------------------------------------------------
 // Quaternion equality with tolerance
