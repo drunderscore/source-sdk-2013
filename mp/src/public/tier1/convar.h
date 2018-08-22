@@ -413,6 +413,8 @@ private:
 	bool						m_bHasMax;
 	float						m_fMaxVal;
 
+#pragma warning(push)
+#pragma warning(disable : 4201) // nonstandard extension used: nameless struct/union
 	union
 	{
 		struct
@@ -426,6 +428,7 @@ private:
 			FnChangeCallback_t			m_fnChangeCallbackClient;
 		};
 	};
+#pragma warning(pop)
 };
 
 
