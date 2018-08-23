@@ -17,6 +17,11 @@
 //-----------------------------------------------------------------------------
 typedef struct con_nprint_s
 {
+	constexpr con_nprint_s(int index = 0, float time_to_live = 4) :
+		index(index), time_to_live(time_to_live), color{ 1, 1, 1 }, fixed_width_font(false)
+	{
+	}
+
 	int		index;			// Row #
 	float	time_to_live;	// # of seconds before it disappears. -1 means to display for 1 frame then go away.
 	float	color[ 3 ];		// RGB colors ( 0.0 -> 1.0 scale )
