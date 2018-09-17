@@ -37,8 +37,9 @@ public:
 
 	// Construction/destruction
 	Vector2D(void);
+	explicit Vector2D(vec_t xy) : Vector2D(xy, xy) {}
 	Vector2D(vec_t X, vec_t Y);
-	Vector2D(const float *pFloat);
+	explicit Vector2D(const float *pFloat);
 
 	// Initialization
 	void Init(vec_t ix=0.0f, vec_t iy=0.0f);
