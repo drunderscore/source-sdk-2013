@@ -1195,6 +1195,9 @@ protected:
 	static void ProcessInterpolatedList();
 	static void CheckInterpolatedVarParanoidMeasurement();
 
+	virtual void unkn1();
+	virtual void unkn2();
+
 	// overrideable rules if an entity should interpolate
 	virtual bool ShouldInterpolate();
 
