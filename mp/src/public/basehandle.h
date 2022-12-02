@@ -92,10 +92,10 @@ inline CBaseHandle::CBaseHandle( int iEntry, int iSerialNumber )
 
 inline void CBaseHandle::Init( int iEntry, int iSerialNumber )
 {
-	Assert( iEntry >= 0 && iEntry < NUM_ENT_ENTRIES );
+	Assert(iEntry >= 0 && (iEntry & ENT_ENTRY_MASK) == iEntry);
 	Assert( iSerialNumber >= 0 && iSerialNumber < (1 << NUM_SERIAL_NUM_BITS) );
 
-	m_Index = iEntry | (iSerialNumber << NUM_ENT_ENTRY_BITS);
+	m_Index = iEntry | (iSerialNumber << NUM_SERIAL_NUM_SHIFT_BITS);
 }
 
 inline void CBaseHandle::Term()
@@ -110,12 +110,14 @@ inline bool CBaseHandle::IsValid() const
 
 inline int CBaseHandle::GetEntryIndex() const
 {
+	if (!IsValid())
+		return NUM_ENT_ENTRIES - 1;
 	return m_Index & ENT_ENTRY_MASK;
 }
 
 inline int CBaseHandle::GetSerialNumber() const
 {
-	return m_Index >> NUM_ENT_ENTRY_BITS;
+	return m_Index >> NUM_SERIAL_NUM_SHIFT_BITS;
 }
 
 inline int CBaseHandle::ToInt() const
