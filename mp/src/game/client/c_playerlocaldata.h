@@ -77,6 +77,7 @@ public:
 
 	bool					m_bSlowMovement;
 
+	PADDING(256);
 };
 
 #endif // C_PLAYERLOCALDATA_H

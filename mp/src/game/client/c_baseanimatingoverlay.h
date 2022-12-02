@@ -19,6 +19,8 @@
 class C_BaseAnimatingOverlay : public C_BaseAnimating
 {
 public:
+	PADDING(8);
+
 	DECLARE_CLASS( C_BaseAnimatingOverlay, C_BaseAnimating );
 	DECLARE_CLIENTCLASS();
 	DECLARE_PREDICTABLE();
