@@ -2985,30 +2985,6 @@ bool KeyValues::ProcessResolutionKeys( const char *pResString )
 
 
 
-//
-// KeyValues dumping implementation
-//
-bool KeyValues::Dump( IKeyValuesDumpContext *pDump, int nIndentLevel /* = 0 */ )
-{
-	if ( !pDump->KvBeginKey( this, nIndentLevel ) )
-		return false;
-	
-	// Dump values
-	for ( KeyValues *val = this ? GetFirstValue() : NULL; val; val = val->GetNextValue() )
-	{
-		if ( !pDump->KvWriteValue( val, nIndentLevel + 1 ) )
-			return false;
-	}
-
-	// Dump subkeys
-	for ( KeyValues *sub = this ? GetFirstTrueSubKey() : NULL; sub; sub = sub->GetNextTrueSubKey() )
-	{
-		if ( !sub->Dump( pDump, nIndentLevel + 1 ) )
-			return false;
-	}
-
-	return pDump->KvEndKey( this, nIndentLevel );
-}
 
 bool IKeyValuesDumpContextAsText::KvBeginKey( KeyValues *pKey, int nIndentLevel )
 {

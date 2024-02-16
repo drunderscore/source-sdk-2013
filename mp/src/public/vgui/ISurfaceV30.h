@@ -43,9 +43,9 @@ namespace vgui
 	class Point;
 
 	// handles
-	typedef unsigned long HCursor;
-	typedef unsigned long HTexture;
-	typedef unsigned long HFont;
+	typedef uint32_t HCursor;
+	typedef uint32_t HTexture;
+	typedef uint32_t HFont;
 }
 
 

@@ -21,8 +21,8 @@ class KeyValues;
 namespace vgui
 {
 
-typedef unsigned long HScheme;
-typedef unsigned long HTexture;
+typedef uint32_t HScheme;
+typedef uint32_t HTexture;
 
 class IBorder;
 class IImage;

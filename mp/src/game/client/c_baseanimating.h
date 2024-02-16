@@ -585,6 +585,9 @@ private:
 	Vector							m_vecPreRagdollMins;
 	Vector							m_vecPreRagdollMaxs;
 
+	// FIXME: Padding is likely needed elsewhere (above, perhaps dispersed in smaller amounts)
+	// 		  but we care about getting to this pointer right now.
+	PADDING(24);
 	// Current animation sequence
 	int								m_nSequence;
 	bool							m_bReceivedSequence;

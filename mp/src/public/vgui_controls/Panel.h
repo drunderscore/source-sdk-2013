@@ -28,6 +28,7 @@
 #include "vstdlib/IKeyValuesSystem.h"
 #include "tier1/utlsymbol.h"
 #include "vgui_controls/BuildGroup.h"
+#include "tier1/utldict.h"
 
 #include <cstdint>
 
@@ -632,8 +633,6 @@ public:
 	void		SetParentNeedsCursorMoveEvents( bool bNeedsEvents ) { m_bParentNeedsCursorMoveEvents = bNeedsEvents; }
 	bool		ParentNeedsCursorMoveEvents() const { return m_bParentNeedsCursorMoveEvents; }
 
-	int ComputePos( const char *pszInput, int &nPos, const int& nSize, const int& nParentSize, const bool& bX );
-
 	// For 360: support directional navigation between UI controls via dpad
 	enum NAV_DIRECTION { ND_UP, ND_DOWN, ND_LEFT, ND_RIGHT, ND_BACK, ND_NONE };
 	virtual Panel* NavigateUp();
@@ -844,7 +843,7 @@ private:
 	bool			m_bToolTipOverridden;
 
 	PHandle			m_SkipChild;
-	long			m_lLastDoublePressTime;
+	int32_t			m_lLastDoublePressTime;
 	HFont			m_infoFont;
 
 #if defined( VGUI_USEKEYBINDINGMAPS )
@@ -872,7 +871,7 @@ private:
 	short			m_nResizeDeltaY;
 
 	HCursor			_cursor;
-	unsigned short	_buildModeFlags; // flags that control how the build mode dialog handles this panel
+	unsigned int	_buildModeFlags; // flags that control how the build mode dialog handles this panel
 
 	byte			_pinCorner : 4;	// the corner of the dialog this panel is pinned to
 	byte			_autoResizeDirection : 4; // the directions in which the panel will auto-resize to
@@ -925,7 +924,7 @@ private:
 
 	static Panel* m_sMousePressedPanels[ ( MOUSE_MIDDLE - MOUSE_LEFT ) + 1 ];
 
-	uint8_t _CEPADDING0[44];
+	CUtlDict< VPanelHandle > m_dictChidlren;
 
 	CPanelAnimationVar( float, m_flAlpha, "alpha", "255" );
 
@@ -1030,6 +1029,13 @@ void VguiPanelGetSortedChildPanelList( Panel *pParentPanel, void *pSortedPanels 
 void VguiPanelGetSortedChildButtonList( Panel *pParentPanel, void *pSortedPanels, char *pchFilter = NULL, int nFilterType = 0 );
 int VguiPanelNavigateSortedChildButtonList( void *pSortedPanels, int nDir );
 
+enum EOperator
+{
+	OP_ADD,
+	OP_SUB,
+	OP_SET,
+};
+int ComputePos( Panel* pPanel, const char *pszInput, int &nPos, const int& nSize, const int& nParentSize, const bool& bX, EOperator eOp );
 
 } // namespace vgui
 

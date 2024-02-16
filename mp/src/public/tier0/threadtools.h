@@ -686,7 +686,7 @@ private:
 		return TryLockInline( threadId );
 	}
 
-	PLATFORM_CLASS void Lock( const uint32 threadId, unsigned nSpinSleepTime ) volatile;
+	PLATFORM_CLASS void Lock( const uint64_t threadId, unsigned nSpinSleepTime ) volatile;
 
 public:
 	bool TryLock() volatile

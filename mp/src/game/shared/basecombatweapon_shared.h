@@ -105,7 +105,7 @@ class Color;
 
 namespace vgui2
 {
-	typedef unsigned long HFont;
+	typedef uint32_t HFont;
 }
 
 // -----------------------------------------

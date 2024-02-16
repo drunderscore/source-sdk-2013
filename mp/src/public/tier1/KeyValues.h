@@ -256,7 +256,7 @@ public:
 	bool ProcessResolutionKeys( const char *pResString );
 
 	// Dump keyvalues recursively into a dump context
-	bool Dump( class IKeyValuesDumpContext *pDump, int nIndentLevel = 0 );
+	bool Dump( class IKeyValuesDumpContext *pDump, int nIndentLevel = 0, bool bSorted = false );
 		
 	// Merge in another KeyValues, keeping "our" settings
 	void RecursiveMergeKeyValues( KeyValues *baseKV );

@@ -4383,91 +4383,6 @@ int Panel::ComputeTall( KeyValues *inResourceData, int nParentWide, int nParentT
 	return tall;
 }
 
-int Panel::ComputePos( const char *pszInput, int &nPos, const int& nSize, const int& nParentSize, const bool& bX )
-{
-	const int nFlagRightAlign = bX ? BUILDMODE_SAVE_XPOS_RIGHTALIGNED : BUILDMODE_SAVE_YPOS_BOTTOMALIGNED;
-	const int nFlagCenterAlign = bX ? BUILDMODE_SAVE_XPOS_CENTERALIGNED : BUILDMODE_SAVE_YPOS_CENTERALIGNED;
-	const int nFlagProportionalSlef = bX ? BUILDMODE_SAVE_XPOS_PROPORTIONAL_SELF : BUILDMODE_SAVE_YPOS_PROPORTIONAL_SELF;
-	const int nFlagProportionalParent = bX ? BUILDMODE_SAVE_XPOS_PROPORTIONAL_PARENT : BUILDMODE_SAVE_YPOS_PROPORTIONAL_PARENT;
-
-	int nFlags = 0;
-	int nPosDelta = 0;
-	if ( pszInput )
-	{
-		// look for alignment flags
-		if (pszInput[0] == 'r' || pszInput[0] == 'R')
-		{
-			nFlags |= nFlagRightAlign;
-			pszInput++;
-		}
-		else if (pszInput[0] == 'c' || pszInput[0] == 'C')
-		{
-			nFlags |= nFlagCenterAlign;
-			pszInput++;
-		}
-
-		if ( pszInput[0] == 's' || pszInput[0] == 'S' )
-		{
-			nFlags |= nFlagProportionalSlef;
-			pszInput++;
-		}
-		else if ( pszInput[0] == 'p' || pszInput[0] == 'P' )
-		{
-			nFlags |= nFlagProportionalParent;
-			pszInput++;
-		}
-
-		// get the value
-		nPos = atoi( pszInput );
-		float flPos = atof( pszInput );
-
-		float flProportion = 1.f;
-		// scale the x up to our screen co-ords
-		if ( IsProportional() )
-		{
-			int nOldPos = nPos;
-			nPos = scheme()->GetProportionalScaledValueEx(GetScheme(), nPos);
-			flProportion = (float)nPos / (float)nOldPos;
-		}
-
-		if ( nFlags & nFlagProportionalSlef )
-		{
-			nPosDelta = nSize * flPos;
-		}
-		else if ( nFlags & nFlagProportionalParent )
-		{
-			nPosDelta = nParentSize * flPos;
-		}
-		else
-		{
-			nPosDelta = nPos;
-		}
-
-		// now correct the alignment
-		if ( nFlags & nFlagRightAlign )
-		{
-			nPos = nParentSize - nPosDelta;
-		}
-		else if ( nFlags & nFlagCenterAlign )
-		{
-			nPos = (nParentSize / 2) + nPosDelta;
-		}
-		else
-		{
-			nPos = nPosDelta;
-		}
-	}
-
-	if ( tf_debug_tabcontainer.GetBool() && !Q_stricmp( "TabContainer", GetName() ) )
-	{
-		Msg( "TabContainer nFlags:%x nPos:%d nParentSize:%d nPosDelta:%d nSize:%d GetParent:%p (%s) pszInput:'%s'\n",
-				nFlags, nPos, nParentSize, nPosDelta, nSize, GetParent(), GetParent() ? GetParent()->GetName() : "??",
-				pszInput ? pszInput : "??" );
-	}
-
-	return nFlags;
-}
-
 Panel::PinCorner_e GetPinCornerFromString( const char* pszCornerName )
 {
 	if ( pszCornerName == NULL )
@@ -4562,8 +4477,8 @@ void Panel::ApplySettings(KeyValues *inResourceData)
 	GetPos(x, y);
 	const char *xstr = inResourceData->GetString( "xpos", NULL );
 	const char *ystr = inResourceData->GetString( "ypos", NULL );
-	_buildModeFlags |= ComputePos( xstr, x, wide, alignScreenWide, true );
-	_buildModeFlags |= ComputePos( ystr, y, tall, alignScreenTall, false );
+	_buildModeFlags |= ComputePos( xstr, x, wide, alignScreenWide, true, OP_SET );
+	_buildModeFlags |= ComputePos( ystr, y, tall, alignScreenTall, false, OP_SET );
 	
 
 	bool bUsesTitleSafeArea = false;
