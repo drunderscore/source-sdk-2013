@@ -9,6 +9,7 @@
 #ifndef THREADTOOLS_H
 #define THREADTOOLS_H
 
+#include <cstdint>
 #include <limits.h>
 
 #include "tier0/platform.h"
