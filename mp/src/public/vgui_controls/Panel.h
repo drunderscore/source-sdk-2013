@@ -865,6 +865,9 @@ private:
 
 	HBuildGroup		_buildGroup;
 
+	// Maybe this is part of HBuildGroup/CUtlHandle, but the patch notes that broke this + it's rare usage leads me to believe it's here.
+	unsigned char _unknown01[4];
+
 	short			m_nPinDeltaX;		// Relative position of the pinned corner to the edge
 	short			m_nPinDeltaY;
 	short			m_nResizeDeltaX;	// Relative position of the non-pinned corner to the edge
