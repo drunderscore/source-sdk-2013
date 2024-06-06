@@ -16,6 +16,7 @@
 #include "animationlayer.h"
 #include "convar.h"
 
+#include "cdll_client_int.h"
 
 #include "tier0/memdbgon.h"
 
