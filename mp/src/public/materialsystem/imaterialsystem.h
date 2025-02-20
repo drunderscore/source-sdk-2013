@@ -66,7 +66,14 @@ typedef uint64 VertexFormat_t;
 
 // NOTE NOTE NOTE!!!!  If you up this, grep for "NEW_INTERFACE" to see if there is anything
 // waiting to be enabled during an interface revision.
-#define MATERIAL_SYSTEM_INTERFACE_VERSION "VMaterialSystem081"
+
+// V081 - 10/25/2016 - Added new Suspend/Resume texture streaming interfaces. Might also have added more calls here due
+//                     to the streaming work that didn't get bumped, but we're not guarding versions on the TF branch
+//                     very judiciously since we need to audit them when merging to SDK branch either way.
+//
+// misyl: unfrogged this interface to be compatible, added MATERIAL_SYSTEM_INTERFACE_VERSION_OLD for sdk 2013 compat.
+#define MATERIAL_SYSTEM_INTERFACE_VERSION "VMaterialSystem082"
+#define MATERIAL_SYSTEM_INTERFACE_VERSION_OLD "VMaterialSystem080"
 
 #ifdef POSIX
 #define ABSOLUTE_MINIMUM_DXLEVEL 90
@@ -563,6 +570,15 @@ class CShadowMgr;
 
 DECLARE_POINTER_HANDLE( MaterialLock_t );
 
+enum RenderBackend_t
+{
+       RENDER_BACKEND_UNKNOWN,
+       RENDER_BACKEND_D3D9,
+       RENDER_BACKEND_TOGL,
+       RENDER_BACKEND_VULKAN,
+       RENDER_BACKEND_NULL,
+};
+
 //-----------------------------------------------------------------------------
 // 
 //-----------------------------------------------------------------------------
@@ -796,10 +812,7 @@ public:
 	virtual bool				UsingFastClipping( void ) = 0;
 
 	virtual int					StencilBufferBits( void ) = 0; //number of bits per pixel in the stencil buffer
-	
-	// Pazer - ADDED IN VMaterialSystem081
-	virtual void SuspendTextureStreaming() = 0;
-	virtual void ResumeTextureStreaming() = 0;
+
 
 	//---------------------------------------------------------
 	// Material and texture management
@@ -1081,6 +1094,19 @@ public:
 	// creates a texture suitable for use with materials from a raw stream of bits.
 	// The bits will be retained by the material system and can be freed upon return.
 	virtual ITexture*			CreateNamedTextureFromBitsEx( const char* pName, const char *pTextureGroupName, int w, int h, int mips, ImageFormat fmt, int srcBufferSize, byte* srcBits, int nFlags ) = 0;
+
+        // Creates a texture compositor template for use in later code.
+        virtual bool                            AddTextureCompositorTemplate( const char* pName, KeyValues* pTmplDesc, int nTexCompositeTemplateFlags = 0 ) = 0;
+
+        // Performs final verification of all compositor templates (after they've all been initially loaded).
+        virtual bool                            VerifyTextureCompositorTemplates( ) = 0;
+
+        virtual RenderBackend_t         GetRenderBackend() const = 0;
+
+        // Stop attempting to stream in textures in response to usage.  Useful for phases such as loading or other explicit
+        // operations that shouldn't take usage of textures as a signal to stream them in at full rez.
+        virtual void                            SuspendTextureStreaming() = 0;
+        virtual void                            ResumeTextureStreaming() = 0;
 };
 
 
