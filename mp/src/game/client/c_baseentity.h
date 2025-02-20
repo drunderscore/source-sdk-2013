@@ -816,6 +816,7 @@ public:
 	void							PreEntityPacketReceived( int commands_acknowledged );
 	void							PostEntityPacketReceived( void );
 	bool							PostNetworkDataReceived( int commands_acknowledged );
+        virtual bool                                    PredictionErrorShouldResetLatchedForAllPredictables( void ) { return true; } //legacy behavior is that any prediction error causes all predictables to reset latched
 	bool							GetPredictionEligible( void ) const;
 	void							SetPredictionEligible( bool canpredict );
 
@@ -1152,6 +1153,9 @@ public:
 
 	int		GetCreationTick() const;
 
+        virtual void ClientAdjustStartSoundParams( EmitSound_t &params ) {}
+        virtual void ClientAdjustStartSoundParams( StartSoundParams_t& params ) {}
+
 #ifdef _DEBUG
 	void FunctionCheck( void *pFunction, const char *name );
 
@@ -1194,9 +1198,6 @@ protected:
 	static void ProcessTeleportList();
 	static void ProcessInterpolatedList();
 	static void CheckInterpolatedVarParanoidMeasurement();
-
-	virtual void unkn1();
-	virtual void unkn2();
 
 	// overrideable rules if an entity should interpolate
 	virtual bool ShouldInterpolate();
@@ -1708,6 +1709,9 @@ protected:
 	RenderMode_t m_PreviousRenderMode;
 	color32 m_PreviousRenderColor;
 #endif
+
+private:
+        bool    m_bOldShouldDraw;
 
 	friend class OffsetChecking;
 };
