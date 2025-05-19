@@ -348,6 +348,8 @@ public:
 
 	// scheme access functions
 	virtual HScheme GetScheme();
+	// James: The TF2 SDK says that this virtual is _above_ GetScheme, but the retail build on Steam disagrees -- it is actually here, below GetScheme.
+	virtual bool CanAnimate() const { return true; } // If the panel can animate
 	virtual void SetScheme(const char *tag);
 	virtual void SetScheme(HScheme scheme);
 	virtual Color GetSchemeColor(const char *keyName,IScheme *pScheme);
