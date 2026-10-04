@@ -448,6 +448,15 @@ KeyValues::KeyValues( const char *setName, const char *firstKey, int firstValue,
 //-----------------------------------------------------------------------------
 void KeyValues::Init()
 {
+#ifdef PLATFORM_64BITS
+	// Must match the game's layout, as KeyValues are allocated and freed on both sides
+	static_assert( sizeof( KeyValues ) == 0x48, "KeyValues layout does not match the game" );
+	static_assert( offsetof( KeyValues, m_bUsesLocalSymbolTable ) == 0x23, "KeyValues layout does not match the game" );
+	static_assert( offsetof( KeyValues, m_bOwnsLocalSymbolTable ) == 0x24, "KeyValues layout does not match the game" );
+	static_assert( offsetof( KeyValues, m_pPeer ) == 0x28, "KeyValues layout does not match the game" );
+	static_assert( offsetof( KeyValues, m_pLocalSymbolTable ) == 0x40, "KeyValues layout does not match the game" );
+#endif
+
 	m_iKeyName = INVALID_KEY_SYMBOL;
 	m_iDataType = TYPE_NONE;
 
@@ -462,8 +471,9 @@ void KeyValues::Init()
 	m_bHasEscapeSequences = false;
 	m_bEvaluateConditionals = true;
 
-	// for future proof
-	memset( unused, 0, sizeof(unused) );
+	m_bUsesLocalSymbolTable = false;
+	m_bOwnsLocalSymbolTable = false;
+	m_pLocalSymbolTable = NULL;
 }
 
 //-----------------------------------------------------------------------------
@@ -2784,16 +2794,18 @@ bool KeyValues::ReadAsBinary( CUtlBuffer &buffer, int nStackDepth )
 //-----------------------------------------------------------------------------
 // Purpose: memory allocator
 //-----------------------------------------------------------------------------
+// Callers bake sizeof(KeyValues) in at the call site, and some prebuilt libraries (tier2, tier3) were compiled before the
+// game grew KeyValues. Always allocate at least our size, so whatever they create matches the game's layout.
 void *KeyValues::operator new( size_t iAllocSize )
 {
 	MEM_ALLOC_CREDIT();
-	return KeyValuesSystem()->AllocKeyValuesMemory( (int)iAllocSize );
+	return KeyValuesSystem()->AllocKeyValuesMemory( (int)MAX( iAllocSize, sizeof( KeyValues ) ) );
 }
 
 void *KeyValues::operator new( size_t iAllocSize, int nBlockUse, const char *pFileName, int nLine )
 {
 	MemAlloc_PushAllocDbgInfo( pFileName, nLine );
-	void *p = KeyValuesSystem()->AllocKeyValuesMemory( (int)iAllocSize );
+	void *p = KeyValuesSystem()->AllocKeyValuesMemory( (int)MAX( iAllocSize, sizeof( KeyValues ) ) );
 	MemAlloc_PopAllocDbgInfo();
 	return p;
 }
@@ -2985,6 +2997,65 @@ bool KeyValues::ProcessResolutionKeys( const char *pResString )
 
 
 
+//
+// KeyValues dumping implementation
+//
+bool KeyValues::Dump( IKeyValuesDumpContext *pDump, int nIndentLevel /* = 0 */,  bool bSorted /*= false*/ )
+{
+	if ( !pDump->KvBeginKey( this, nIndentLevel ) )
+		return false;
+
+	if ( bSorted )
+	{
+		CUtlSortVector< KeyValues*, CUtlSortVectorKeyValuesByName > vecSortedKeys;
+
+		// Dump values
+		for ( KeyValues *val = GetFirstValue(); val; val = val->GetNextValue() )
+		{
+			vecSortedKeys.InsertNoSort( val );
+		}
+		vecSortedKeys.RedoSort();
+
+		FOR_EACH_VEC( vecSortedKeys, i )
+		{
+			if ( !pDump->KvWriteValue( vecSortedKeys[i], nIndentLevel + 1 ) )
+				return false;
+		}
+
+		vecSortedKeys.Purge();
+
+		// Dump subkeys
+		for ( KeyValues *sub = GetFirstTrueSubKey(); sub; sub = sub->GetNextTrueSubKey() )
+		{
+			vecSortedKeys.InsertNoSort( sub );
+		}
+		vecSortedKeys.RedoSort();
+
+		FOR_EACH_VEC( vecSortedKeys, i )
+		{
+			if ( !vecSortedKeys[i]->Dump( pDump, nIndentLevel + 1, bSorted ) )
+				return false;
+		}
+	}
+	else
+	{
+		// Dump values
+		for ( KeyValues *val = GetFirstValue(); val; val = val->GetNextValue() )
+		{
+			if ( !pDump->KvWriteValue( val, nIndentLevel + 1 ) )
+				return false;
+		}
+
+		// Dump subkeys
+		for ( KeyValues *sub = GetFirstTrueSubKey(); sub; sub = sub->GetNextTrueSubKey() )
+		{
+			if ( !sub->Dump( pDump, nIndentLevel + 1 ) )
+				return false;
+		}
+	}
+
+	return pDump->KvEndKey( this, nIndentLevel );
+}
 
 bool IKeyValuesDumpContextAsText::KvBeginKey( KeyValues *pKey, int nIndentLevel )
 {
