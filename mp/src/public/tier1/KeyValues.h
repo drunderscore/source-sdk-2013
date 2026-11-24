@@ -333,8 +333,8 @@ private:
 	// of the global KeyValuesSystem when m_bUsesLocalSymbolTable is set. Children inherit it from their parent. We
 	// don't know the table's layout, so we only mirror these members to match the game's sizeof(KeyValues) (0x48 on
 	// x64) and initialize them, as the game's own code reads and frees them on KeyValues we hand to it.
-	bool	   m_bUsesLocalSymbolTable;
-	bool	   m_bOwnsLocalSymbolTable;
+	unsigned char	   m_bUsesLocalSymbolTable : 1;
+	unsigned char	   m_bOwnsLocalSymbolTable : 1;
 
 	KeyValues *m_pPeer;	// pointer to next key in list
 	KeyValues *m_pSub;	// pointer to Start of a new sub key list
